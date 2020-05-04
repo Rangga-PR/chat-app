@@ -1,27 +1,31 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <login-form />
   </div>
 </template>
 
 <script>
-  import HelloWorld from "./components/HelloWorld.vue";
-
-  export default {
-    name: "App",
-    components: {
-      HelloWorld,
-    },
-  };
+import LoginForm from "./components/loginform/LoginForm";
+export default {
+  name: "App",
+  components: {
+    LoginForm,
+  },
+};
 </script>
 
-<style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
+<style lang="scss">
+@import "./styles/_variables.scss";
+
+#app {
+  background-color: $blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+}
 </style>
