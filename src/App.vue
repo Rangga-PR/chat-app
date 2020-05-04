@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1 class="app-title">Chat App</h1>
     <login-form />
   </div>
 </template>
@@ -20,6 +21,7 @@ export default {
 #app {
   background-color: $blue;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100vw;
@@ -27,5 +29,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+
+  .app-title {
+    color: $white;
+    font-size: 3rem;
+    text-decoration: underline;
+    margin-top: 0;
+  }
 }
 </style>

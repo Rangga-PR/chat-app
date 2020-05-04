@@ -25,6 +25,7 @@ export default {
   height: 1.5rem;
   padding: 5px;
   border-radius: 3px;
+  color: $black;
 }
 
 .password {
