@@ -1,16 +1,16 @@
 <template>
   <div id="app">
     <h1 class="app-title">Chat App</h1>
-    <login-form />
+    <login-register />
   </div>
 </template>
 
 <script>
-import LoginForm from "./components/loginform/LoginForm";
+import LoginRegister from "./components/loginregister/LoginRegister";
 export default {
   name: "App",
   components: {
-    LoginForm,
+    LoginRegister,
   },
 };
 </script>
