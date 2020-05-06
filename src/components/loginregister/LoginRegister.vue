@@ -1,11 +1,12 @@
 <template>
   <div class="wrapper">
+    <div class="status" :class="reportStatus">{{report}}</div>
     <div class="wrapper login">
-      <login-form />
+      <login-form @loginStatus="setReport" />
     </div>
     <div class="separator"></div>
     <div class="wrapper register">
-      <register-form />
+      <register-form @registerStatus="setReport" />
     </div>
   </div>
 </template>
@@ -20,6 +21,18 @@ export default {
     LoginForm,
     RegisterForm,
   },
+  data() {
+    return {
+      report: "",
+      reportStatus: "",
+    };
+  },
+  methods: {
+    setReport: function(report, status) {
+      this.report = report;
+      this.reportStatus = status;
+    },
+  },
 };
 </script>
 
@@ -27,6 +40,7 @@ export default {
 @import "../../styles/_variables.scss";
 
 .wrapper {
+  position: relative;
   display: flex;
   flex-direction: column-reverse;
 }
@@ -44,6 +58,28 @@ export default {
   font-weight: 700;
   margin-top: 1rem;
   color: $white;
+}
+
+.status {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  color: white;
+  font-weight: 700;
+  bottom: -10vh;
+  padding: 0.5rem 0;
+  border-radius: 3px;
+  transition: ease-in 0.7s;
+}
+
+.success {
+  opacity: 1;
+  background-color: $green;
+}
+
+.failure {
+  opacity: 1;
+  background-color: salmon;
 }
 
 @media screen and(min-width: $mobile-breakpoints) {

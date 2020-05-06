@@ -1,14 +1,46 @@
 <template>
-  <form class="form-container">
-    <input class="input" type="text" name="username" placeholder="Username" />
-    <input class="input password" type="password" name="password" placeholder="Password" />
+  <form class="form-container" @submit.prevent="signUp">
+    <input v-model="username" class="input" type="text" name="username" placeholder="Username" />
+    <input
+      v-model="password"
+      class="input password"
+      type="password"
+      name="password"
+      placeholder="Password"
+    />
     <input class="btn register" type="submit" value="Sign Up" />
   </form>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: "loginForm",
+  name: "RegisterForm",
+  data() {
+    return {
+      username: "",
+      password: "",
+      report: "",
+    };
+  },
+  methods: {
+    signUp: function() {
+      axios
+        .post(`${process.env.SERVER_URL}/signup`, {
+          username: this.username,
+          password: this.password,
+        })
+        .then(res => {
+          this.report = res.data.message;
+          this.$emit("registerStatus", this.report, "success");
+        })
+        .catch(err => {
+          if (err.response) this.report = err.response.data.message;
+          this.$emit("registerStatus", this.report, "failure");
+        });
+    },
+  },
 };
 </script>
 

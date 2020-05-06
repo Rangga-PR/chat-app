@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const UserModel = require("./model/user");
@@ -9,6 +10,7 @@ const salt = 10;
 
 (async () => {
   const appServer = express();
+  appServer.use(cors());
   appServer.use(bodyParser.urlencoded({ extended: false }));
   appServer.use(bodyParser.json());
 
