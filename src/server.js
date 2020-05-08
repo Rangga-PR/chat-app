@@ -1,5 +1,7 @@
 require("dotenv").config();
 const express = require("express");
+const http = require("http");
+const io = require("socket.io");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -10,6 +12,9 @@ const salt = 10;
 
 (async () => {
   const appServer = express();
+  const chatServer = http.createServer(appServer);
+  const chatSocket = io(chatServer);
+
   appServer.use(cors());
   appServer.use(bodyParser.urlencoded({ extended: false }));
   appServer.use(bodyParser.json());
@@ -18,6 +23,10 @@ const salt = 10;
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useCreateIndex: true,
+  });
+
+  chatSocket.on("connection", socket => {
+    console.log("socket connected");
   });
 
   appServer.post("/signup", async (req, res) => {
@@ -61,5 +70,9 @@ const salt = 10;
 
   appServer.listen(3000, () => {
     console.log("server is running on port 3000");
+  });
+
+  chatServer.listen(3001, () => {
+    console.log("chat server is running on port 3001");
   });
 })();
