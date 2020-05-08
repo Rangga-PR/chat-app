@@ -1,16 +1,20 @@
 <template>
   <div id="app">
-    <h1 class="app-title">Chat App</h1>
-    <login-register />
+    <!-- <h1 class="app-title">Chat App</h1>
+    <login-register />-->
+    <chat />
   </div>
 </template>
 
 <script>
 import LoginRegister from "./components/loginregister/LoginRegister";
+import Chat from "./components/chat/Chat";
+
 export default {
   name: "App",
   components: {
     LoginRegister,
+    Chat,
   },
 };
 </script>
