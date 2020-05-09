@@ -18,7 +18,16 @@ Vue.use(VueRouter);
 
 const routes = [
   { path: "/", name: "login", component: LoginRegister },
-  { path: "/chat", name: "chat", component: Chat },
+  {
+    path: "/chat",
+    name: "chat",
+    component: Chat,
+    beforeEnter: (to, from, next) => {
+      const user = localStorage.getItem("chatAppUser");
+      if (user) next();
+      else router.push({ path: "/" });
+    },
+  },
 ];
 
 const router = new VueRouter({

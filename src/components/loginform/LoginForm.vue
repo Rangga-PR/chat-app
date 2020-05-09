@@ -32,6 +32,7 @@ export default {
           password: this.password,
         })
         .then(res => {
+          localStorage.setItem("chatAppUser", res.data.result.username);
           this.report = res.data.message;
           this.$emit("loginStatus", this.report, "success");
         })
