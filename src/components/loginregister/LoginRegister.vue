@@ -1,12 +1,15 @@
 <template>
-  <div class="wrapper">
-    <div class="status" :class="reportStatus">{{report}}</div>
-    <div class="wrapper login">
-      <login-form @loginStatus="setReport" />
-    </div>
-    <div class="separator"></div>
-    <div class="wrapper register">
-      <register-form @registerStatus="setReport" />
+  <div class="container">
+    <h1 class="app-title">Chat App</h1>
+    <div class="wrapper">
+      <div class="status" :class="reportStatus">{{report}}</div>
+      <div class="wrapper login">
+        <login-form @loginStatus="setReport" />
+      </div>
+      <div class="separator"></div>
+      <div class="wrapper register">
+        <register-form @registerStatus="setReport" />
+      </div>
     </div>
   </div>
 </template>
@@ -39,6 +42,11 @@ export default {
 <style lang="scss" scoped>
 @import "../../styles/_variables.scss";
 
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
 .wrapper {
   position: relative;
   display: flex;
@@ -58,6 +66,13 @@ export default {
   font-weight: 700;
   margin-top: 1rem;
   color: $white;
+}
+
+.app-title {
+  color: $white;
+  font-size: 3rem;
+  text-decoration: underline;
+  margin-top: 0;
 }
 
 .status {

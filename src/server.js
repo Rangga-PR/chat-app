@@ -25,10 +25,6 @@ const salt = 10;
     useCreateIndex: true,
   });
 
-  chatSocket.on("connection", socket => {
-    console.log("socket connected");
-  });
-
   appServer.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
     const newUser = await new UserModel({
@@ -66,6 +62,12 @@ const salt = 10;
       .catch(err => {
         res.status(500).json({ message: "failed to login" });
       });
+  });
+
+  chatSocket.on("connect", socket => {
+    console.log("socket connected");
+
+    socket.emit("customEmit", { message: "emit from server" });
   });
 
   appServer.listen(3000, () => {

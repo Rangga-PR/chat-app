@@ -33,6 +33,14 @@ export default {
   props: {
     chatTitle: String,
   },
+  sockets: {
+    connect: function() {
+      console.log("socket io on client is connected");
+    },
+    customEmit: function(data) {
+      console.log(data);
+    },
+  },
 };
 </script>
 
@@ -54,7 +62,7 @@ export default {
   margin: 10px 0;
 
   &.right {
-    float: right;
+    align-self: flex-end;
 
     .chat-text,
     .chat-sender {
@@ -63,7 +71,7 @@ export default {
   }
 
   &.left {
-    float: left;
+    align-self: flex-start;
 
     .chat-text,
     .chat-sender {
@@ -108,6 +116,8 @@ export default {
 }
 
 .conversation-container {
+  display: flex;
+  flex-direction: column;
   max-height: 80%;
   min-height: 80%;
   padding: 0 2%;
