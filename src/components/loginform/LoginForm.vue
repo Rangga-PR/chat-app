@@ -38,7 +38,7 @@ export default {
 
           setTimeout(() => {
             this.$router.push({ path: "/chat" });
-          }, 2000);
+          }, 1000);
         })
         .catch(err => {
           if (err.response) this.report = err.response.data.message;
