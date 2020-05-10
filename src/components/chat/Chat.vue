@@ -67,6 +67,8 @@ export default {
       element.scrollTo(0, element.scrollHeight);
     },
     sendChatMessage: function() {
+      if (this.message == "") return;
+
       this.$socket.emit("chatMessage", {
         sender: this.user,
         message: this.message,
