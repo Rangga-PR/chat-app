@@ -22,7 +22,7 @@ const routes = [
     path: "/chat",
     name: "chat",
     component: Chat,
-    props: { chatTitle: localStorage.getItem("chatAppUser") },
+    props: { chatTitle: "Chat Room" },
     beforeEnter: (to, from, next) => {
       const user = localStorage.getItem("chatAppUser");
       if (user) next();

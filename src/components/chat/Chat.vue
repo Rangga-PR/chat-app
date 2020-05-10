@@ -4,14 +4,15 @@
       <div class="top-bar">
         <h3 class="chat-title">{{chatTitle || "Chat Room"}}</h3>
       </div>
-      <div class="conversation-container">
+      <div class="conversation-container" ref="chatContainer">
         <div
           v-for="(chat, i) in chats"
           :key="`chat-${i}`"
           class="chat-box"
-          :class="[chat.sender === user ? 'right' : 'left']"
+          :class="[chat.sender === user ? 'right' : chat.sender === 'Chat Room' ? 'center' : 'left']"
         >
-          <div class="chat-content">
+          <p class="chat-announcement" v-if="chat.sender === 'Chat Room'">{{chat.message}}</p>
+          <div v-else class="chat-content">
             <p class="chat-sender">{{chat.sender}}</p>
             <p class="chat-text">{{chat.message}}</p>
           </div>
@@ -19,7 +20,10 @@
       </div>
       <div class="bottom-bar">
         <input class="chat-input" type="text" v-model="message" @keyup.enter="sendChatMessage" />
-        <i class="material-icons" @click="sendChatMessage">send</i>
+        <div class="send-btn">
+          <i class="material-icons" @click="sendChatMessage">send</i>
+          <span class="send-text">Send</span>
+        </div>
       </div>
     </div>
   </div>
@@ -49,16 +53,27 @@ export default {
     message: function(msg) {
       this.chats.push(msg);
     },
+    userJoined: function(msg) {
+      this.chats.push(msg);
+    },
   },
   mounted() {
     this.user = localStorage.getItem("chatAppUser") || "You";
+    this.$socket.emit("userEnter", this.user);
   },
   methods: {
+    autoScrollDown: function() {
+      const element = this.$refs.chatContainer;
+      element.scrollTo(0, element.scrollHeight);
+    },
     sendChatMessage: function() {
       this.$socket.emit("chatMessage", {
         sender: this.user,
         message: this.message,
       });
+
+      this.message = "";
+      this.autoScrollDown();
     },
   },
 };
@@ -79,12 +94,11 @@ export default {
 }
 
 .chat-box {
-  margin: 10px 0;
+  margin: 5px 0;
 
   &.right {
     align-self: flex-end;
 
-    .chat-text,
     .chat-sender {
       text-align: right;
     }
@@ -93,10 +107,13 @@ export default {
   &.left {
     align-self: flex-start;
 
-    .chat-text,
     .chat-sender {
       text-align: left;
     }
+  }
+
+  &.center {
+    align-self: center;
   }
 }
 
@@ -105,6 +122,7 @@ export default {
   width: fit-content;
   padding: 0.3em 1em 0.5em 1em;
   border-radius: 5px;
+  overflow-wrap: anywhere;
 
   .chat-text,
   .chat-sender {
@@ -112,8 +130,12 @@ export default {
     margin: 0;
   }
 
+  .chat-text {
+    text-align: left;
+  }
+
   .chat-sender {
-    margin-bottom: 5px;
+    margin-bottom: 1px;
     font-weight: bolder;
     text-decoration: underline;
   }
@@ -127,11 +149,25 @@ export default {
   background-color: $blue;
   height: 10%;
 
-  .material-icons {
+  .send-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 2px solid white;
     border-radius: 5px;
-    padding: 0.1em;
+    height: 50%;
+  }
+
+  .send-text {
+    display: none;
+    padding-right: 5px;
     color: white;
+    font-weight: bolder;
+  }
+
+  .material-icons {
+    color: white;
+    padding: 0 0.2em;
   }
 }
 
@@ -153,8 +189,25 @@ export default {
   border: none;
   border-radius: 5px;
   height: 55%;
-  width: 75%;
-  margin-right: 10px;
+  width: 80%;
+  margin-right: 2%;
   padding: 0 5px;
+}
+
+.chat-announcement {
+  margin: 0;
+  font-size: 0.9em;
+  color: salmon;
+  font-weight: bolder;
+}
+
+@media only screen and(min-width: 768px) {
+  .bottom-bar .send-btn {
+    width: 10%;
+  }
+
+  .bottom-bar .send-text {
+    display: block;
+  }
 }
 </style>

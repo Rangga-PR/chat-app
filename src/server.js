@@ -65,9 +65,16 @@ const salt = 10;
   });
 
   chatSocket.on("connection", socket => {
-    socket.emit("welcome", {
-      sender: "room",
-      message: "welcome to the chatroom",
+    socket.on("userEnter", user => {
+      socket.emit("welcome", {
+        sender: "Chat Room",
+        message: `Welcome to the this Chat Room ${user}`,
+      });
+
+      socket.broadcast.emit("userJoined", {
+        sender: "Chat Room",
+        message: `${user} has joined the Chat`,
+      });
     });
 
     socket.on("chatMessage", msg => {
