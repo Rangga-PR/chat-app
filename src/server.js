@@ -64,10 +64,15 @@ const salt = 10;
       });
   });
 
-  chatSocket.on("connect", socket => {
-    console.log("socket connected");
+  chatSocket.on("connection", socket => {
+    socket.emit("welcome", {
+      sender: "room",
+      message: "welcome to the chatroom",
+    });
 
-    socket.emit("customEmit", { message: "emit from server" });
+    socket.on("chatMessage", msg => {
+      chatSocket.emit("message", msg);
+    });
   });
 
   appServer.listen(3000, () => {

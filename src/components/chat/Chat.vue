@@ -5,23 +5,21 @@
         <h3 class="chat-title">{{chatTitle || "Chat Room"}}</h3>
       </div>
       <div class="conversation-container">
-        <div class="chat-box left">
+        <div
+          v-for="(chat, i) in chats"
+          :key="`chat-${i}`"
+          class="chat-box"
+          :class="[chat.sender === user ? 'right' : 'left']"
+        >
           <div class="chat-content">
-            <p class="chat-sender right">maudi ayunda</p>
-            <p class="chat-text right">hallo apa kabarnya?</p>
-          </div>
-        </div>
-
-        <div class="chat-box right">
-          <div class="chat-content">
-            <p class="chat-sender">you</p>
-            <p class="chat-text">kabar baik kok? kamu sendiri?</p>
+            <p class="chat-sender">{{chat.sender}}</p>
+            <p class="chat-text">{{chat.message}}</p>
           </div>
         </div>
       </div>
       <div class="bottom-bar">
-        <input class="chat-input" type="text" />
-        <i class="material-icons">send</i>
+        <input class="chat-input" type="text" v-model="message" @keyup.enter="sendChatMessage" />
+        <i class="material-icons" @click="sendChatMessage">send</i>
       </div>
     </div>
   </div>
@@ -33,12 +31,34 @@ export default {
   props: {
     chatTitle: String,
   },
+  data() {
+    return {
+      user: "",
+      message: "",
+      chats: [],
+    };
+  },
   sockets: {
     connect: function() {
       console.log("socket io on client is connected");
+      this.chats = [];
     },
-    customEmit: function(data) {
-      console.log(data);
+    welcome: function(msg) {
+      this.chats.push(msg);
+    },
+    message: function(msg) {
+      this.chats.push(msg);
+    },
+  },
+  mounted() {
+    this.user = localStorage.getItem("chatAppUser") || "You";
+  },
+  methods: {
+    sendChatMessage: function() {
+      this.$socket.emit("chatMessage", {
+        sender: this.user,
+        message: this.message,
+      });
     },
   },
 };

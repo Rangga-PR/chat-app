@@ -35,6 +35,10 @@ export default {
           localStorage.setItem("chatAppUser", res.data.result.username);
           this.report = res.data.message;
           this.$emit("loginStatus", this.report, "success");
+
+          setTimeout(() => {
+            this.$router.push({ path: "/chat" });
+          }, 2000);
         })
         .catch(err => {
           if (err.response) this.report = err.response.data.message;
