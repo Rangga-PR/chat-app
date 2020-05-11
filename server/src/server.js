@@ -82,11 +82,11 @@ const salt = 10;
     });
   });
 
-  appServer.listen(3000, () => {
-    console.log("server is running on port 3000");
+  appServer.listen(process.env.PORT || 3000, () => {
+    console.log("app server is running");
   });
 
-  chatServer.listen(3001, () => {
-    console.log("chat server is running on port 3001");
+  chatServer.listen(process.env.PORT || 3001, () => {
+    console.log("chat server is running");
   });
 })();
