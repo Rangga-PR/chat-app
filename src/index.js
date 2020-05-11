@@ -10,7 +10,7 @@ import "./styles/main.scss";
 Vue.use(
   new VueSocketIO({
     debug: true,
-    connection: SocketIO("http://localhost:3001"),
+    connection: SocketIO(process.env.SERVER_URL),
   })
 );
 
