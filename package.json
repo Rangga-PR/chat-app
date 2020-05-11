@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server --config webpack.dev.js",
     "server": "nodemon ./src/server.js",
+    "server-prod": "node ./src/server.js ",
     "prod": "webpack-dev-server --config webpack.prod.js --open --hot --port 8080",
     "build": "webpack --config webpack.prod.js"
   },
