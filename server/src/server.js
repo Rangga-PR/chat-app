@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const UserModel = require("../model/user");
+const UserModel = require("./model/user");
 
 const salt = 10;
 
@@ -34,10 +34,10 @@ const salt = 10;
 
     newUser
       .save()
-      .then(result => {
+      .then((result) => {
         res.status(200).json({ message: "success", result });
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.code === 11000)
           res.status(400).json({ message: "username already taken" });
         else {
@@ -48,7 +48,7 @@ const salt = 10;
 
   appServer.post("/signin", async (req, res) => {
     await UserModel.findOne({ username: req.body.username })
-      .then(result => {
+      .then((result) => {
         if (!result) {
           res.status(404).json({ message: "this user is not found" });
         } else {
@@ -59,13 +59,13 @@ const salt = 10;
           });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).json({ message: "failed to login" });
       });
   });
 
-  chatSocket.on("connection", socket => {
-    socket.on("userEnter", user => {
+  chatSocket.on("connection", (socket) => {
+    socket.on("userEnter", (user) => {
       socket.emit("welcome", {
         sender: "Chat Room",
         message: `Welcome to the this Chat Room ${user}`,
@@ -77,7 +77,7 @@ const salt = 10;
       });
     });
 
-    socket.on("chatMessage", msg => {
+    socket.on("chatMessage", (msg) => {
       chatSocket.emit("message", msg);
     });
   });
