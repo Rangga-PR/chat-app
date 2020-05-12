@@ -74,6 +74,9 @@ const botName = "Chat Room";
   chatSocket.on("connection", (socket) => {
     socket.on("joinChat", (username) => {
       const user = joinChatRoom(socket.id, username);
+      const users = getRoomUsers();
+
+      chatSocket.emit("userPopulation", users);
 
       socket.emit("welcome", {
         sender: botName,
@@ -100,6 +103,9 @@ const botName = "Chat Room";
           message: `${user.username} has left the chat`,
         });
       }
+
+      const users = getRoomUsers();
+      chatSocket.emit("userPopulation", users);
     });
   });
 

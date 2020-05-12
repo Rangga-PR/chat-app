@@ -3,6 +3,7 @@
     <div class="chat-wrapper">
       <div class="top-bar">
         <h3 class="chat-title">{{chatTitle || "Chat Room"}}</h3>
+        <span class="counter">{{users.length}}</span>
       </div>
       <div class="conversation-container" ref="chatContainer">
         <div
@@ -40,6 +41,7 @@ export default {
       user: "",
       message: "",
       chats: [],
+      users: [],
     };
   },
   sockets: {
@@ -58,6 +60,9 @@ export default {
     },
     userLeft: function(msg) {
       this.chats.push(msg);
+    },
+    userPopulation: function(users) {
+      this.users = users;
     },
   },
   mounted() {
@@ -184,6 +189,7 @@ export default {
 }
 
 .chat-title {
+  font-size: 1.2rem;
   color: white;
   margin: 0;
 }
@@ -202,6 +208,22 @@ export default {
   font-size: 0.9em;
   color: salmon;
   font-weight: bolder;
+}
+
+.counter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $blue;
+  text-align: center;
+  font-weight: bolder;
+  background-color: $white;
+  height: 1.5rem;
+  width: 1.5rem;
+  padding: 0 0.5rem;
+  min-width: fit-content;
+  margin-left: 0.5rem;
+  border-radius: 20px;
 }
 
 @media only screen and(min-width: 768px) {
