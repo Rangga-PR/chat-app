@@ -56,10 +56,16 @@ export default {
     userJoined: function(msg) {
       this.chats.push(msg);
     },
+    userLeft: function(msg) {
+      this.chats.push(msg);
+    },
   },
   mounted() {
     this.user = localStorage.getItem("chatAppUser") || "You";
-    this.$socket.emit("userEnter", this.user);
+    this.$socket.emit("joinChat", this.user);
+  },
+  beforeDestroy() {
+    this.$socket.emit("disconnect", this.user);
   },
   methods: {
     autoScrollDown: function() {
@@ -68,12 +74,7 @@ export default {
     },
     sendChatMessage: function() {
       if (this.message == "") return;
-
-      this.$socket.emit("chatMessage", {
-        sender: this.user,
-        message: this.message,
-      });
-
+      this.$socket.emit("chatMessage", this.message);
       this.message = "";
       this.autoScrollDown();
     },

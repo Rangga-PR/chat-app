@@ -7,8 +7,15 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const UserModel = require("./model/user");
+const {
+  joinChatRoom,
+  leftChatRoom,
+  getCurrentUser,
+  getRoomUsers,
+} = require("./helper/userhelper");
 
 const salt = 10;
+const botName = "Chat Room";
 
 (async () => {
   const appServer = express();
@@ -65,20 +72,34 @@ const salt = 10;
   });
 
   chatSocket.on("connection", (socket) => {
-    socket.on("userEnter", (user) => {
+    socket.on("joinChat", (username) => {
+      const user = joinChatRoom(socket.id, username);
+
       socket.emit("welcome", {
-        sender: "Chat Room",
-        message: `Welcome to the this Chat Room ${user}`,
+        sender: botName,
+        message: `Welcome to the this Chat Room ${user.username}`,
       });
 
       socket.broadcast.emit("userJoined", {
-        sender: "Chat Room",
-        message: `${user} has joined the Chat`,
+        sender: botName,
+        message: `${user.username} has joined the Chat`,
       });
     });
 
     socket.on("chatMessage", (msg) => {
-      chatSocket.emit("message", msg);
+      const user = getCurrentUser(socket.id);
+      console.log(user);
+      chatSocket.emit("message", { sender: user.username, message: msg });
+    });
+
+    socket.on("disconnect", () => {
+      const user = leftChatRoom(socket.id);
+      if (user) {
+        chatSocket.emit("userLeft", {
+          sender: botName,
+          message: `${user.username} has left the chat`,
+        });
+      }
     });
   });
 
@@ -86,7 +107,7 @@ const salt = 10;
     console.log("app server is running");
   });
 
-  chatServer.listen(process.env.PORT || 3001, () => {
+  chatServer.listen(process.env.CHAT_PORT || 3001, () => {
     console.log("chat server is running");
   });
 })();
